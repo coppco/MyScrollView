@@ -18,6 +18,7 @@
 		44E1E6961C10329D001C7F4D /* XHJScrollViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 44E1E6951C10329D001C7F4D /* XHJScrollViewTests.m */; };
 		44E1E6A11C10329D001C7F4D /* XHJScrollViewUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 44E1E6A01C10329D001C7F4D /* XHJScrollViewUITests.m */; };
 		44E1E6B11C10451A001C7F4D /* MyScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 44E1E6B01C10451A001C7F4D /* MyScrollView.m */; };
+		44E1E6B51C106219001C7F4D /* BlurImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 44E1E6B41C106219001C7F4D /* BlurImageView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,8 @@
 		44E1E6A21C10329D001C7F4D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		44E1E6AF1C10451A001C7F4D /* MyScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyScrollView.h; sourceTree = "<group>"; };
 		44E1E6B01C10451A001C7F4D /* MyScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyScrollView.m; sourceTree = "<group>"; };
+		44E1E6B31C106219001C7F4D /* BlurImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlurImageView.h; sourceTree = "<group>"; };
+		44E1E6B41C106219001C7F4D /* BlurImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlurImageView.m; sourceTree = "<group>"; };
 		B5C357C8A37A426974AD226A /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		EEEE9588E0011F79FDA812C2 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		F9E9920C37CCDFD4574251A5 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -113,6 +116,7 @@
 		44E1E6771C10329D001C7F4D /* XHJScrollView */ = {
 			isa = PBXGroup;
 			children = (
+				44E1E6B21C106208001C7F4D /* BlurImageView */,
 				44E1E6AE1C1044E9001C7F4D /* MyScrollView */,
 				44E1E67B1C10329D001C7F4D /* AppDelegate.h */,
 				44E1E67C1C10329D001C7F4D /* AppDelegate.m */,
@@ -162,6 +166,15 @@
 			);
 			name = MyScrollView;
 			path = ScrollView;
+			sourceTree = "<group>";
+		};
+		44E1E6B21C106208001C7F4D /* BlurImageView */ = {
+			isa = PBXGroup;
+			children = (
+				44E1E6B31C106219001C7F4D /* BlurImageView.h */,
+				44E1E6B41C106219001C7F4D /* BlurImageView.m */,
+			);
+			path = BlurImageView;
 			sourceTree = "<group>";
 		};
 		7E2AB79C6EA73B31351881C0 /* Frameworks */ = {
@@ -370,6 +383,7 @@
 				44E1E6861C10329D001C7F4D /* XHJScrollView.xcdatamodeld in Sources */,
 				44E1E6B11C10451A001C7F4D /* MyScrollView.m in Sources */,
 				44E1E67A1C10329D001C7F4D /* main.m in Sources */,
+				44E1E6B51C106219001C7F4D /* BlurImageView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

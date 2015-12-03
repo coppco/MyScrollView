@@ -7,124 +7,92 @@
 //
 
 #import "MyScrollView.h"
+#import "BlurImageView.h"   //毛玻璃效果
 #import <UIImageView+WebCache.h>
+
 #define kWidth [UIScreen mainScreen].bounds.size.width
 
 @interface MyScrollView ()<iCarouselDataSource, iCarouselDelegate>
+
+//数组
+@property (nonatomic, strong) NSArray *dataArr;
 @property (nonatomic, strong) iCarousel *carousel;
 @property (nonatomic, strong) NSTimer *timer;
-
-@property (nonatomic, strong) UIImageView *backImageV;
+//毛玻璃视图
+@property (nonatomic, strong) BlurImageView *blurImageV;
 @end
 
 @implementation MyScrollView
-- (instancetype)initWithFrame:(CGRect)frame{
+- (instancetype)initWithFrame:(CGRect)frame dataArr:(NSArray *)dataArray type:(iCarouselType)type {
+    self.dataArr = dataArray;
     
     self = [super initWithFrame:frame];
     if (self) {
+        //毛玻璃背景图片
+        self.blurImageV = [[BlurImageView alloc] initWithFrame:self.bounds];
+        NSString *str = self.dataArr[0];
+        if ([str hasPrefix:@"http"]) {
+            [self.blurImageV sd_setImageWithURL:[NSURL URLWithString:str] placeholderImage:[UIImage imageNamed:@"load.jpg"]];
+        }else{
+            self.blurImageV.image = [UIImage imageNamed:str];
+        }
+        [self addSubview:self.blurImageV];
         
-        self.myScrollView = [[UIView alloc] initWithFrame:frame];
-        
-        // 初始化carousel并设置代理,数据源,和type
-        self.carousel = [[iCarousel alloc] initWithFrame:self.myScrollView.bounds];
-        
+        //轮播图
+        self.carousel = [[iCarousel alloc] initWithFrame:self.bounds];
         self.carousel.delegate = self;
         self.carousel.dataSource = self;
-        // 这个type我们在初始化的时候就随便给一个,这样即使我们不转动视图也可以显示背景图片
-        self.carousel.type = iCarouselTypeInvertedWheel;
-        self.carousel.scrollSpeed = 6;
+        self.carousel.type = type;
         self.carousel.pagingEnabled = YES;
-        [self.myScrollView addSubview:self.carousel];
+        self.carousel.scrollOffset = 0;
+        [self addSubview:self.carousel];
         
         // 初始化pageControl
         self.pageControl = [[UIPageControl alloc] init];
         self.pageControl.numberOfPages = self.dataArr.count;
-        self.pageControl.center = CGPointMake(self.myScrollView.center.x, self.myScrollView.bounds.size.height - 10);
-        [self.myScrollView addSubview:self.pageControl];
-        
-        
-        [self addSubview:self.myScrollView];
-        
-        
-        // 这里我们设置一个背景图,并且插入在旋转图下方,在代理方法里面改变图片
-        self.backImageV = [[UIImageView alloc] initWithFrame:frame];
-        [self insertSubview:self.backImageV belowSubview:self.myScrollView];
-        
-        // 启动时就打开计时器,很多时候都用不上,就先关上
-        //        [self addTimer];
-        
-        
-        // 毛玻璃效果
-        UIBlurEffect *blur = [UIBlurEffect effectWithStyle:(UIBlurEffectStyleLight)];
-        UIVisualEffectView *effectView = [[UIVisualEffectView alloc] initWithEffect:blur];
-        effectView.frame = frame;
-        effectView.alpha = 0.8;
-        
-        // 这里把毛玻璃效果放在对应的视图下方
-        [self insertSubview:effectView belowSubview:self.myScrollView];
-        
-        
+        self.pageControl.center = CGPointMake(self.center.x, self.bounds.size.height - 10);
+        [self addSubview:self.pageControl];
     }
     return self;
 }
 
-// 数据源传入的时候,需要刷新carousel
-- (void)setDataArr:(NSArray *)dataArr{
-    _dataArr = dataArr;
-    
-    self.pageControl.numberOfPages = dataArr.count;
-    [self.carousel reloadData];
++ (instancetype)myScrollViewWithFrame:(CGRect)frame dataArr:(NSArray *)dataArray type:(iCarouselType)type {
+    return [[self alloc] initWithFrame:frame dataArr:dataArray type:type];
 }
-- (void)setType:(iCarouselType)type{
-    
-    _type = type;
-    self.carousel.type = type;
-}
-
 
 #pragma mark ---delegate,datasource
 // 下面是carousel的代理方法和数据源方法,根据每个方法名可以清晰的指导其作用
 - (NSInteger)numberOfItemsInCarousel:(iCarousel *)carousel{
-    
     return self.dataArr.count;
 }
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSInteger)index reusingView:(UIView *)view{
-    
     if (view == nil) {
-        
         // 这里可以控制每张图的大小, 当然最好写在外部,方便我们调节
-        UIImageView *imageV = [[UIImageView alloc] initWithFrame:(CGRectMake(0, 0, 200, 200))];
-        
-        imageV.contentMode = UIViewContentModeScaleAspectFit;
+        UIImageView *imageV = [[UIImageView alloc] initWithFrame:(CGRectMake(0, 0, 220, 300))];
+        //图片不失真
+//        imageV.contentMode = UIViewContentModeScaleAspectFit;
         NSString *str = self.dataArr[index];
         
         // 下面的判断是调用网络请求还是本地图片
         if ([str hasPrefix:@"http"]) {
-            
             [imageV sd_setImageWithURL:[NSURL URLWithString:str] placeholderImage:[UIImage imageNamed:@"load.jpg"]];
         }else{
-            
             imageV.image = [UIImage imageNamed:str];
         }
-        
         view = imageV;
     }
     return view;
 }
 - (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index{
-    
     if (self.clickAction) {
         self.clickAction(index, self.dataArr);
     }
 }
+//滚动的时候
 - (void)carouselDidScroll:(iCarousel *)carousel{
-    
     self.pageControl.currentPage = carousel.currentItemIndex;
-    
     UIImageView *imageV = (UIImageView *)self.carousel.currentItemView;
-    
-    self.backImageV.image = imageV.image;
-    
+    self.blurImageV.image = imageV.image;
 }
 - (void)carouselWillBeginDragging:(iCarousel *)carousel{
     
@@ -153,7 +121,7 @@
     
     UIImageView *imageV = (UIImageView *)self.carousel.currentItemView;
     
-    self.backImageV.image = imageV.image;
+    self.blurImageV.image = imageV.image;
 }
 - (void)removeTimer{
     

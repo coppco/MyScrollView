@@ -11,13 +11,9 @@
 
 @interface MyScrollView : UIView
 
-// 视图
-@property (nonatomic, strong) UIView *myScrollView;
+- (instancetype)initWithFrame:(CGRect)frame dataArr:(NSArray *)dataArray type:(iCarouselType)type;
 
-// 外界传入数据源数组
-@property (nonatomic, strong) NSArray *dataArr;
-
-@property (nonatomic, assign) iCarouselType type;
++ (instancetype)myScrollViewWithFrame:(CGRect)frame dataArr:(NSArray *)dataArray type:(iCarouselType)type;
 
 // 这个可有可无
 @property (nonatomic, strong) UIPageControl *pageControl;
